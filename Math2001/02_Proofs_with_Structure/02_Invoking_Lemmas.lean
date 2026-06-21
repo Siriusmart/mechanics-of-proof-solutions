@@ -12,7 +12,10 @@ example {x : ℚ} (hx : 3 * x = 2) : x ≠ 1 := by
     _ < 1 := by numbers
 
 example {y : ℝ} : y ^ 2 + 1 ≠ 0 := by
-  sorry
+  apply ne_of_gt
+  calc
+    0 < 1 := by norm_num
+    _ ≤ y ^ 2 + 1 := by extra
 
 example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a ^ 2 = 0 := by
   apply le_antisymm
@@ -26,7 +29,20 @@ example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a ^ 2 = 0 := by
 
 
 example {m : ℤ} (hm : m + 1 = 5) : 3 * m ≠ 6 := by
-  sorry
+  apply ne_of_gt
+  have hm : m = 4 := by addarith[hm]
+  calc
+    3 * m
+      = 3 * 4 := by rw[hm]
+    _ > 6 := by norm_num
 
 example {s : ℚ} (h1 : 3 * s ≤ -6) (h2 : 2 * s ≥ -4) : s = -2 := by
-  sorry
+  apply le_antisymm
+  calc
+    s = (3 * s) / 3 := by ring
+    _ ≤ (-6) / 3 := by rel[h1]
+    _ = -2 := by norm_num
+  calc
+    s = (2 * s) / 2 := by ring
+    _ ≥ (-4) / 2 := by rel[h2]
+    _ = -2 := by norm_num
